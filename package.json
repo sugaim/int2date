@@ -2,7 +2,7 @@
   	"name": "int2date",
 	"displayName": "Int2Date",
 	"publisher": "sugaim",
-	"description": "Persional extension to read serial (excel) date as an ordinary date.",
+	"description": "Hover an ordinary date on a serial (excel) date",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.58.0"
@@ -12,14 +12,28 @@
 	],
 	"activationEvents": [
         "onCommand:int2date.convert",
-		"onLanguage:xml"
+		"onCommand:int2date.activateHover",
+		"onCommand:int2date.deactiveHover",
+		"onCommand:int2date.listUpActiveHoverList"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "int2date.convert",
-				"title": "Int2Date: Convert a serial (excel) date into a date."
+				"title": "Int2Date: Convert"
+			},
+			{
+				"command": "int2date.activateHover",
+				"title": "Int2Date: Activate Int2Date hover on current language"
+			},
+			{
+				"command": "int2date.deactiveHover",
+				"title": "Int2Date: Deactivate all Int2Date hovers"
+			},
+			{
+				"command": "int2date.listUpActiveHoverList",
+				"title": "Int2Date: Show active hover list"
 			}
 		]
 	},
