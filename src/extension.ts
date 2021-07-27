@@ -9,16 +9,34 @@ function serialDateToDate(serialDate: number): Date|undefined {
 		// serial number should be an integer.
 		return;
 	}
-	if (serialDate < 2) {
+	if (serialDate < 1) {
 		// serial date for 0 or 1 is not defined
 		// because Date(1900, 1, 1) is the smallest date in JS.
 		return;
 	}
-	return new Date(1900, 1, serialDate - 1);
+	if (59 < serialDate) {
+		serialDate--;
+	}
+	var date = new Date(1900, 0, 1);
+	date.setDate(date.getDate() + serialDate - 1);
+	return date;
 }
 
 function dateToStr(date: Date): string {
-	return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate();
+	return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+}
+
+function serialDateToDateStr(serialDate: number): string|undefined {
+	// special treatment is necessary because 1900 is treated as an ordinary year in JS.
+	if (serialDate === 60) {
+		return '1900/2/29';
+	}
+
+	let date = serialDateToDate(serialDate);
+	if (date === undefined) {
+		return undefined;
+	}
+	return dateToStr(date);
 }
 
 class Int2DateHoverProvider {
@@ -52,15 +70,15 @@ class Int2DateHoverProvider {
 			targetRange.start.character, 
 			targetRange.end.character
 		);
-		vscode.extensions.getExtension
-		let date = serialDateToDate(serialDate);
-		if (date === undefined) {
+		vscode.extensions.getExtension;
+		let dateStr = serialDateToDateStr(serialDate);
+		if (dateStr === undefined) {
 			return Promise.reject("Fail to parse " + serialDate + " as a serial date."); 
 		}
 
 		// return value
 		return Promise.resolve(
-			new vscode.Hover(serialDate + ' as date: ' + dateToStr(date))
+			new vscode.Hover(serialDate + ' as date: ' + dateStr)
 		);
 	}
 }
@@ -130,17 +148,17 @@ export function activate(context: vscode.ExtensionContext) {
 			validateInput: param => {
 				return (param.match(/^\d{1,5}$/) !== null && 1 < +param)
 					? undefined
-					: "input: serial date (2~99999)"; 
+					: "input: serial date (1~99999)"; 
 			}
 		}).then((value: string|undefined) => {
 			if (value === undefined) {
 				return;
 			}
-			let date = serialDateToDate(+value);
-			if (date === undefined) {
+			let dateStr = serialDateToDateStr(+value);
+			if (dateStr === undefined) {
 				return;
 			}
-			vscode.window.showInformationMessage('result: ' + dateToStr(date));
+			vscode.window.showInformationMessage('result: ' + dateStr);
 		});
 	});
 	context.subscriptions.push(convertCommand);
