@@ -3,7 +3,7 @@
 	"displayName": "Int2Date",
 	"publisher": "sugaim",
 	"description": "Hover an ordinary date on a serial (excel) date",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.58.0"
 	},
